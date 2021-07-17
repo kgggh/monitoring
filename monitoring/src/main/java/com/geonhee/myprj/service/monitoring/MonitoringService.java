@@ -2,20 +2,22 @@ package com.geonhee.myprj.service.monitoring;
 
 import java.net.InetAddress;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.geonhee.myprj.domain.host.Host;
 import com.geonhee.myprj.service.host.HostService;
-import com.geonhee.myprj.web.dto.HostResponseDto;
 import com.geonhee.myprj.web.dto.HostUpdateRequestDto;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class MonitoringService {
-	@Autowired
-	private HostService hostSerivce;
+	final HostService hostSerivce;
 	
     @Scheduled(fixedDelay = 1000)
     @Async(value = "fooExecutor")
@@ -26,10 +28,10 @@ public class MonitoringService {
     	System.out.println("완료");
     }
     
-    public void realTimeMonitoring(HostResponseDto hostResponDto) {
+    public void realTimeMonitoring(Optional<Host> hostResponseDto) {
     	HostUpdateRequestDto hostUpdateRequestDto = new HostUpdateRequestDto();
     	try {
-    	    InetAddress iaddr = InetAddress.getByName(hostResponDto.getHostName());
+    	    InetAddress iaddr = InetAddress.getByName(hostResponseDto.get().getHostName());
     	    System.out.println(iaddr.getHostAddress());
     	    boolean reachable = iaddr.isReachable(1000);
     	    if(reachable) {
@@ -42,10 +44,9 @@ public class MonitoringService {
     	    			.alive("N")
     	    			.build();
     	    }
-    	    hostSerivce.update(hostResponDto.getId(), hostUpdateRequestDto);
+    	    hostSerivce.update(hostResponseDto.get().getId(), hostUpdateRequestDto);
     	} catch (Exception e) {
-    		e.printStackTrace();
-    		System.out.println("---------에러--------");
+    		System.out.println("----에러---- \n 해당 호스트이름: " + hostResponseDto.get().getHostName());
     	}
     }
 

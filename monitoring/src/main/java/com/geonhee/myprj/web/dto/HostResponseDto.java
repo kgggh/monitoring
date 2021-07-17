@@ -2,9 +2,7 @@ package com.geonhee.myprj.web.dto;
 
 
 import java.time.LocalDateTime;
-
 import com.geonhee.myprj.domain.host.Host;
-
 import lombok.Getter;
 
 @Getter
@@ -22,5 +20,6 @@ public class HostResponseDto {
         this.hostAddress = entity.getHostAddress();
         this.alive = entity.getAlive();
         this.lastAliveTime = entity.getLastAliveTime();
+      
     }
 }
