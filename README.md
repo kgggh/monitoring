@@ -6,6 +6,7 @@
   - mariaDB 10.6
   - gradle 7.1.1
   - springboot 2.5.2
+  - swagger2 2.6.1
 
 ### 요구사항
   - 등록된 원격 호스트들의 Alive 상태를 모니터링하는 서버를 개발한다.
@@ -21,6 +22,7 @@
 
 
 ### REST API 정의
+  * swagger 참고 http://localhost:8080/swagger-ui.html
   * GET
     - 호스트 조회 - 단일 건
       - URL /api/host/{hostName}
@@ -48,3 +50,5 @@
         - Requst 
           - hostName
           - hostAddress
+
+          
