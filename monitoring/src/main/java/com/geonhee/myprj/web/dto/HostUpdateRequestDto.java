@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class HostSaveRequestDto {
+public class HostUpdateRequestDto {
     private String hostName;
     private String hostAddress;
     private String alive;
     private LocalDateTime lastAliveTime;
     @Builder
-    public HostSaveRequestDto(String hostName, String hostAddress, String alive, LocalDateTime lastAliveTime) {
+    public HostUpdateRequestDto(String hostName, String hostAddress,String alive, LocalDateTime lastAliveTime) {
         this.hostName = hostName;
         this.hostAddress = hostAddress;
         this.alive = alive;

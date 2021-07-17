@@ -1,45 +1,61 @@
 package com.geonhee.myprj.domain.host;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.geonhee.myprj.domain.BaseTimeEntity;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Host extends BaseTimeEntity {
+@ToString
+@DynamicUpdate
+public class Host {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
-    
-    @Column(name="port")
-    private int port;
 
     @Column(unique = true)
     private String hostName;
 
     @Column(unique = true)
     private String hostAddress;
+    
+    @ColumnDefault("N")
+    private String alive;
 
     @Column(name="lastAliveTime")
-    private String lastAliveTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime lastAliveTime;
 
     @Builder
-    public Host(int port,String hostName, String hostAddress, String lastAliveTime){
-    	this.port = port;
+    public Host(String hostName, String hostAddress,String alive, LocalDateTime lastAliveTime){
         this.hostName = hostName;
         this.hostAddress = hostAddress;
+        this.alive = alive;
         this.lastAliveTime = lastAliveTime;
+    }
+    
+    public void update(String alive, LocalDateTime lastAliveTime){
+    	this.alive = alive;
+    	this.lastAliveTime = lastAliveTime;
     }
 }	
 

@@ -1,6 +1,5 @@
 package com.geonhee.myprj.web;
 
-import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.geonhee.myprj.domain.host.Host;
 import com.geonhee.myprj.service.errors.Message;
 import com.geonhee.myprj.service.errors.StatusEnum;
-import com.geonhee.myprj.service.monitoring.HostService;
+import com.geonhee.myprj.service.host.HostService;
 import com.geonhee.myprj.web.dto.HostResponseDto;
 import com.geonhee.myprj.web.dto.HostSaveRequestDto;
 
@@ -26,13 +25,13 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-public class MonitoringApiController {
+public class HostController {
 	private final HostService hostService;
 
-	@ApiOperation(value = "단일 호스트 조회",notes = "포트번호로 호스트를 조회한다")
-    @GetMapping("/api/v1/host/{port}")
-    public ResponseEntity<Message> findByHost (@PathVariable Long port) {
-    	HostResponseDto hostResponseDto = hostService.findById(port);
+	@ApiOperation(value = "단일 호스트 조회",notes = "호스트이름으로 호스트를 조회한다")
+    @GetMapping(value = "/api/host/{hostName}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Message> findByHost (@PathVariable String hostName) {
+    	HostResponseDto hostResponseDto = hostService.findByhostName(hostName);
     	Message message = new Message();
     	HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -43,21 +42,8 @@ public class MonitoringApiController {
     }
     
 	@ApiOperation(value = "호스트 리스트 조회",notes = "모든 호스트를 조회한다.")
-    @GetMapping("/api/v1/host")
+    @GetMapping(value = "/api/host", produces = MediaType.APPLICATION_JSON_VALUE) 
     public ResponseEntity<Message> findAllHost () {
-    	try {
-    	    InetAddress iaddr = InetAddress.getByName("127.0.123.1");
-    	    boolean reachable = iaddr.isReachable(2000);
-    	    if(reachable) {
-    	        System.out.println("alive!");
-    	    } else {
-    	        System.out.println("dead..");
-    	    }
-    	 
-    	} catch (Exception e) {
-    	e.printStackTrace();
-    	}
-    	
     	List<Host> hostResponseDto = hostService.findAll();
     	Message message = new Message();
     	HttpHeaders headers= new HttpHeaders();
@@ -69,7 +55,7 @@ public class MonitoringApiController {
     }
     
 	@ApiOperation(value = "호스트 등록",notes = "호스트를 등록한다")
-    @PostMapping("/api/v1/host")
+    @PostMapping(value = "/api/host",consumes = MediaType.APPLICATION_JSON_VALUE)
     public Long save(@RequestBody HostSaveRequestDto hostSaveRequestDto ) {
         return hostService.save(hostSaveRequestDto);
     }
