@@ -65,18 +65,18 @@
 * HTTP Status code 프로젝트를 진행하며 정의하기에 애매모호한 부분 존재
   - 자원이 존재하지 않을 시 404(NOT_FOUND)를 쓰는게 적절할지?
   - 중복된 자원이 존재 할시 409(Conflict)를 쓰는게 적절할지?
-  - POST 요청시 Maximum일시 423(LOCKED)을 쓰는게 적절할지? 
+  - POST 요청시 등록가능한 호스트가 Maximum일시 423(LOCKED)을 쓰는게 적절할지? 
 * 요구사항 중 Alive 상태 조회 REST API의 응답 형식은 json 이며 deserialize 가능해야 한다 -> 애매모호한 부분
   - 역직렬화가 Json TO Java객체를 의미하는지?
     - *이 부분을 제대로 진행 못함.
 
 ### 설계
 * Table은 monitoring이란 table 하나로 구성 ->host alive 정보만 따로 Table로 설계하려다 간단하게 설계.
-* Restful하게 어떻게 구성해야될지?
+* RESTful하게 어떻게 구성해야될지?
 * Response를 어떻게 구성할지 생각
   - Http Status와 별개로 error_code와 message를 body에 data와 함께 던져주는게 낫다 생각
   - enum class로 errorCode를 관리 할까 생각
-    - abstract class(BasicResponse)로 구성 
+    - 결국 abstract class(BasicResponse)로 구성 
       - CommonResponse class,ErrorResponse class가 상속받아 child class가 처리하도록 구성   
   - error_code는 빼고 진행 -> message와 data만 담아서 줌. 
  
@@ -87,8 +87,8 @@
   - alive: 활성화상태(Y:활성화, N:비활성화)
   - last_alive_time: 마지막 활성화 시간
  
-* host들의 connection 상태를 Realtime으로 Checking -> Async MultiThread로 진행하며 job scheduler 돔(  
-  - 등록된 호스트 수 만큼 loop를 돔 -> batch성 job이 아니라 판단(Data 집계성 job) 병렬 처리 위해 parallelStream로 진행
+* host들의 connection 상태를 Realtime으로 Checking -> Async MultiThread로 진행하며 job scheduler 매초마다 start  
+  - 등록된 호스트 수 만큼 loop를 돔 -> 데이터를 순차적으로 처리 할 필요성이 없을것 같아, 병렬 처리 위해 parallelStream로 진행
     - process 흐름
       - 전체 호스트 조회 -> 하나의 호스트 조회 -> 해당 호스트 Connetion 확인 - > 활성화상태(Y:활성화, N:비활성화)에 따라 update 
         - 처리하려는 데이터가 적어서 for문과 parallelStream.foreach 속도차이를 느끼지 못함.
