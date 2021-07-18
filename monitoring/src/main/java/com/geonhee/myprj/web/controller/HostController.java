@@ -21,7 +21,6 @@ import com.geonhee.myprj.web.response.ErrorResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -32,6 +31,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class HostController {
 	private final HostService hostService;
+	
+	@GetMapping("greeting")
+	public String greeting() {
+		return "test";
+	}
 
 	@ApiOperation(value = "단일 호스트 조회",notes = "호스트이름으로 호스트를 조회한다")
 	@ApiImplicitParam(name = "hostName", value = "호스트이름",paramType = "path")

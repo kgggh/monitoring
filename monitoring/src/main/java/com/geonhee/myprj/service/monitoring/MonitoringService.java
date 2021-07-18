@@ -13,19 +13,22 @@ import com.geonhee.myprj.service.host.HostService;
 import com.geonhee.myprj.web.dto.HostUpdateRequestDto;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MonitoringService {
 	final HostService hostSerivce;
 	
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedRate = 1000)
     @Async(value = "fooExecutor")
     public void test() throws Exception{
+    	log.info("시작");
     	hostSerivce.findAll().parallelStream().forEach(host->{
     		realTimeMonitoring(hostSerivce.findByhostName(host.getHostName()));
     	});
-    	System.out.println("완료");
+    	log.info("완료");
     }
     
     public void realTimeMonitoring(Optional<Host> hostResponseDto) {
