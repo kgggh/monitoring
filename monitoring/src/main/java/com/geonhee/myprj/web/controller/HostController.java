@@ -66,7 +66,7 @@ public class HostController {
 	
 	@ApiOperation(value = "호스트 등록",notes = "호스트를 등록한다")
 	@ApiResponses({
-		@ApiResponse(code = 200,message = "성공"),
+		@ApiResponse(code = 204,message = "성공"),
 		@ApiResponse(code = 409,message = "등록된 호스트가 존재"),
 		@ApiResponse(code = 423,message = "최대 100개까지 등록가능"),
 	})
