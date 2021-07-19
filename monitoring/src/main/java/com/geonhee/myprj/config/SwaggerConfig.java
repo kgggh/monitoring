@@ -20,12 +20,12 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.geonhee.myprj.web"))
                 .paths(PathSelectors.any())
                 .build()
-                .useDefaultResponseMessages(false); // 기본으로 세팅되는 200,401,403,404 메시지를 표시 하지 않음
+                .useDefaultResponseMessages(false); 
     }
 
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder().title("Monitoring API Documentation")
                 .description("모니터링 서버 API에 대한 연동 문서입니다")
-                .license("Kim Geon Hee").licenseUrl("https://github.com/kgggh").version("1").build();
+                .license("Kim Geon Hee").licenseUrl("https://github.com/kgggh/monitoring").version("1").build();
     }
 }
